@@ -44,14 +44,20 @@ export default function ChatBotApp({ onGoBack, chats, setChats }) {
           <h2>Chat list</h2>
           <i className="bx bx-edit new-chat"></i>
         </div>
+        {chats.map((chat, index) => (
+          <div
+            key={index}
+            className={`chat-list-item ${index === 0 ? "active" : ""}  `}
+          >
+            <h4>{chat.id}</h4>
+            <i className="bx bxs-folder-minus"></i>
+          </div>
+        ))}
         <div className="chat-list-item">
           <h4> Chat log 22.12.2024 14:05:2024</h4>
           <i className="bx bxs-folder-minus"></i>
         </div>
-        <div className="chat-list-item active">
-          <h4> Chat log 22.12.2024 14:05:2024</h4>
-          <i className="bx bxs-folder-minus"></i>
-        </div>
+
         <div className="chat-list-item">
           <h4> Chat log 22.12.2024 14:05:2024</h4>
           <i className="bx bxs-folder-minus"></i>
