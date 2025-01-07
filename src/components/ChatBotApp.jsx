@@ -60,8 +60,21 @@ export default function ChatBotApp({
     }
   };
 
+  // handling of selected chat and messages accordingly
   const handleActiveChat = (id) => {
     setActiveChat(id);
+  };
+
+  // deleting a chat function
+  const handleDeleteChat = (id) => {
+    const updatedChats = chats.filter((chat) => {
+      chat.id !== id;
+    });
+    setChats(updatedChats);
+
+    // setting of new activeChat after deleting of the active one
+    const newActiveChat = updatedChats.length > 0 ? updatedChats[0].id : [];
+    setActiveChat(newActiveChat);
   };
 
   return (
@@ -80,7 +93,10 @@ export default function ChatBotApp({
             onClick={() => handleActiveChat(chat.id)}
           >
             <h4>{chat.displayID}</h4>
-            <i className="bx bxs-folder-minus"></i>
+            <i
+              className="bx bxs-folder-minus"
+              onClick={() => handleDeleteChat(chat.id)}
+            ></i>
           </div>
         ))}
       </div>
