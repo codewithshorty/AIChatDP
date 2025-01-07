@@ -37,6 +37,14 @@ export default function ChatBotApp({ onGoBack, chats, setChats }) {
 
     setChats(updatedChat);
   };
+
+  const sendMessageEnter = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
   return (
     <div className="chat-app">
       <div className="chat-list">
@@ -79,6 +87,7 @@ export default function ChatBotApp({ onGoBack, chats, setChats }) {
             placeholder="Type the message"
             value={inputValue}
             onChange={handleInputChange}
+            onKeyDown={sendMessageEnter}
           />
           <i className="bx bxs-send" onClick={sendMessage}></i>
         </form>
