@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import "./ChatBotApp.css";
 
-export default function ChatBotApp({ onGoBack, chats, setChats }) {
+export default function ChatBotApp({
+  onGoBack,
+  chats,
+  setChats,
+  activeChat,
+  setActiveChat,
+  onNewChat,
+}) {
   // inputValue state for storing the value
   const [inputValue, setInputValue] = useState("");
   // creating of messages state where we will store messages within the chats object
@@ -28,14 +35,14 @@ export default function ChatBotApp({ onGoBack, chats, setChats }) {
     setInputValue("");
 
     // update the chat object on right chat session with updatedMessages
-    const updatedChat = chats.map((chat, index) => {
+    const updatedChats = chats.map((chat, index) => {
       if (index === 0) {
         return { ...chat, messages: updatedMessages };
       }
       return chat;
     });
 
-    setChats(updatedChat);
+    setChats(updatedChats);
   };
 
   const sendMessageEnter = (e) => {

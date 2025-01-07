@@ -8,18 +8,14 @@ export default function App() {
   //Creating the state for storing the chats
   const [chats, setChats] = useState([]);
 
+  // Creating of activeChat state for tracking of active chat and showing messages which are related to that chat
+  const [activeChat, setActiveChat] = useState(null);
+
   const handleChatStart = () => {
     setIsChatting(true);
     // Checking and creating of initial chat object
     if (chats.length === 0) {
-      const newChat = {
-        id: `Chat log: ${new Date().toLocaleDateString(
-          "en-GB"
-        )} ${new Date().toLocaleTimeString()}`,
-        messages: [],
-      };
-
-      setChats([newChat]);
+      createNewChat();
     }
   };
 
@@ -27,10 +23,32 @@ export default function App() {
     setIsChatting(false);
   };
 
+  // create function for adding new chat with empty messages property and add it to current chats array
+  const createNewChat = () => {
+    const newChat = {
+      id: `Chat log: ${new Date().toLocaleDateString(
+        "en-GB"
+      )} ${new Date().toLocaleTimeString()}`,
+      messages: [],
+    };
+    // create updatedChats component which will be existing chats array spread with the newChat array
+    const updatedChats = [newChat, ...chats];
+    setChats(updatedChats);
+    // setting active chat with one currently created
+    setActiveChat(newChat.id);
+  };
+
   return (
     <div className="container">
       {isChatting ? (
-        <ChatBotApp onGoBack={handleGoBack} chats={chats} setChats={setChats} />
+        <ChatBotApp
+          onGoBack={handleGoBack}
+          chats={chats}
+          setChats={setChats}
+          activeChat={activeChat}
+          setActiveChat={setActiveChat}
+          onNewChat={createNewChat}
+        />
       ) : (
         <ChatBotStart onChatStart={handleChatStart} />
       )}
