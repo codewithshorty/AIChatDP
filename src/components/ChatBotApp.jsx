@@ -69,14 +69,6 @@ export default function ChatBotApp({ onGoBack, chats, setChats }) {
               <span>{message.timestamp}</span>
             </div>
           ))}
-          {/* <div className="prompt">
-            Hello, how are you
-            <span>14:05:2024</span>
-          </div>
-          <div className="response">
-            Hello, I am just an AI, how can I help you
-            <span>14:05:2024</span>
-          </div> */}
           <div className="typing">...Typing...</div>
         </div>
         <form className="msg-form" action="">
@@ -85,6 +77,8 @@ export default function ChatBotApp({ onGoBack, chats, setChats }) {
             type="text"
             className="msg-input"
             placeholder="Type the message"
+            value={inputValue}
+            onChange={handleInputChange}
           />
           <i className="bx bxs-send"></i>
         </form>
