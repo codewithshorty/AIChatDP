@@ -18,7 +18,7 @@ export default function ChatBotApp({ onGoBack, chats, setChats }) {
     if (inputValue.trim === "") return;
     const newMessage = {
       type: "prompt",
-      message: inputValue,
+      text: inputValue,
       timestamp: new Date().toLocaleTimeString(),
     };
 
@@ -53,15 +53,6 @@ export default function ChatBotApp({ onGoBack, chats, setChats }) {
             <i className="bx bxs-folder-minus"></i>
           </div>
         ))}
-        <div className="chat-list-item">
-          <h4> Chat log 22.12.2024 14:05:2024</h4>
-          <i className="bx bxs-folder-minus"></i>
-        </div>
-
-        <div className="chat-list-item">
-          <h4> Chat log 22.12.2024 14:05:2024</h4>
-          <i className="bx bxs-folder-minus"></i>
-        </div>
       </div>
       <div className="chat-window">
         <div className="chat-title">
@@ -69,14 +60,23 @@ export default function ChatBotApp({ onGoBack, chats, setChats }) {
           <i className="bx bx-arrow-back arrow" onClick={onGoBack}></i>
         </div>
         <div className="chat">
-          <div className="prompt">
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`${message.type === "prompt" ? "prompt" : "response"}`}
+            >
+              {message.text}
+              <span>{message.timestamp}</span>
+            </div>
+          ))}
+          {/* <div className="prompt">
             Hello, how are you
             <span>14:05:2024</span>
           </div>
           <div className="response">
             Hello, I am just an AI, how can I help you
             <span>14:05:2024</span>
-          </div>
+          </div> */}
           <div className="typing">...Typing...</div>
         </div>
         <form className="msg-form" action="">
