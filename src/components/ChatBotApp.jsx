@@ -71,7 +71,7 @@ export default function ChatBotApp({ onGoBack, chats, setChats }) {
           ))}
           <div className="typing">...Typing...</div>
         </div>
-        <form className="msg-form" action="">
+        <form className="msg-form" onSubmit={(e) => e.preventDefault()}>
           <i className="bx bx-smile smile"></i>
           <input
             type="text"
@@ -80,7 +80,7 @@ export default function ChatBotApp({ onGoBack, chats, setChats }) {
             value={inputValue}
             onChange={handleInputChange}
           />
-          <i className="bx bxs-send"></i>
+          <i className="bx bxs-send" onClick={sendMessage}></i>
         </form>
       </div>
     </div>
