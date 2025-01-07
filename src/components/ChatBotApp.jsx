@@ -7,6 +7,36 @@ export default function ChatBotApp({ onGoBack, chats, setChats }) {
   // creating of messages state where we will store messages within the chats object
   const [messages, setMessages] = useState(chats[0]?.messages || []);
 
+  // creating the function for updating the state with the change on input value
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  // creating the function for updating the chat.messages field with the input value
+  const sendMessage = () => {
+    //creating the newMEssage object from input value
+    if (inputValue.trim === "") return;
+    const newMessage = {
+      type: "prompt",
+      message: inputValue,
+      timestamp: new Date().toLocaleTimeString(),
+    };
+
+    // update the messages state with new message object
+    const updatedMessages = [...messages, newMessage];
+    setMessages(updatedMessages);
+    setInputValue("");
+
+    // update the chat object on right chat session with updatedMessages
+    const updatedChat = chats.map((chat, index) => {
+      if (index === 0) {
+        return { ...chat, messages: updatedMessages };
+      }
+      return chat;
+    });
+
+    setChats(updatedChat);
+  };
   return (
     <div className="chat-app">
       <div className="chat-list">
