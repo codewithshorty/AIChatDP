@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ChatBotApp.css";
 
 export default function ChatBotApp({
@@ -13,6 +13,12 @@ export default function ChatBotApp({
   const [inputValue, setInputValue] = useState("");
   // creating of messages state where we will store messages within the chats object
   const [messages, setMessages] = useState(chats[0]?.messages || []);
+
+  // create the effect which will follow which chat is clicked and showing the refflected messages with created activeChatObject
+  useEffect(() => {
+    const activeChatObject = chats.find((chat) => chat.id === activeChat);
+    setMessages(activeChatObject ? activeChatObject.messages : []);
+  }, [activeChat, chats]);
 
   // creating the function for updating the state with the change on input value
   const handleInputChange = (e) => {
