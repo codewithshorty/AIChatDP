@@ -41,8 +41,8 @@ export default function ChatBotApp({
     setInputValue("");
 
     // update the chat object on right chat session with updatedMessages
-    const updatedChats = chats.map((chat, index) => {
-      if (index === 0) {
+    const updatedChats = chats.map((chat) => {
+      if (chat.id === activeChat) {
         return { ...chat, messages: updatedMessages };
       }
       return chat;
@@ -51,11 +51,16 @@ export default function ChatBotApp({
     setChats(updatedChats);
   };
 
+  // sending message on click on enter after writing the message in input field
   const sendMessageEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
       sendMessage();
     }
+  };
+
+  const hadnleActiveChat = (id) => {
+    setActiveChat(id);
   };
 
   return (
