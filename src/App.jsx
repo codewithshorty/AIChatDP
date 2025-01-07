@@ -1,6 +1,7 @@
 import ChatBotStart from "./components/ChatBotStart";
 import ChatBotApp from "./components/ChatBotApp";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export default function App() {
   const [isChatting, setIsChatting] = useState(false);
@@ -26,7 +27,8 @@ export default function App() {
   // create function for adding new chat with empty messages property and add it to current chats array
   const createNewChat = () => {
     const newChat = {
-      id: `Chat log: ${new Date().toLocaleDateString(
+      id: uuidv4(),
+      displayID: `Chat log: ${new Date().toLocaleDateString(
         "en-GB"
       )} ${new Date().toLocaleTimeString()}`,
       messages: [],

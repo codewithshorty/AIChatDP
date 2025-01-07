@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import "./ChatBotApp.css";
 
 export default function ChatBotApp({
@@ -78,7 +79,7 @@ export default function ChatBotApp({
             }  `}
             onClick={() => handleActiveChat(chat.id)}
           >
-            <h4>{chat.id}</h4>
+            <h4>{chat.displayID}</h4>
             <i className="bx bxs-folder-minus"></i>
           </div>
         ))}
