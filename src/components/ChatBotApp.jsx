@@ -59,7 +59,7 @@ export default function ChatBotApp({
     }
   };
 
-  const hadnleActiveChat = (id) => {
+  const handleActiveChat = (id) => {
     setActiveChat(id);
   };
 
@@ -68,12 +68,15 @@ export default function ChatBotApp({
       <div className="chat-list">
         <div className="chat-list-header">
           <h2>Chat list</h2>
-          <i className="bx bx-edit new-chat"></i>
+          <i className="bx bx-edit new-chat" onClick={onNewChat}></i>
         </div>
-        {chats.map((chat, index) => (
+        {chats.map((chat) => (
           <div
-            key={index}
-            className={`chat-list-item ${index === 0 ? "active" : ""}  `}
+            key={chat.id}
+            className={`chat-list-item ${
+              chat.id === activeChat ? "active" : ""
+            }  `}
+            onClick={() => handleActiveChat(chat.id)}
           >
             <h4>{chat.id}</h4>
             <i className="bx bxs-folder-minus"></i>
