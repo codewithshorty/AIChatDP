@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 
 import "./ChatBotApp.css";
@@ -36,20 +37,25 @@ export default function ChatBotApp({
       timestamp: new Date().toLocaleTimeString(),
     };
 
-    // update the messages state with new message object
-    const updatedMessages = [...messages, newMessage];
-    setMessages(updatedMessages);
-    setInputValue("");
+    // scenario where there is no activeChat in case all chats are deleted
+    if (!activeChat) {
+      onNewChat(inputValue);
+    } else {
+      // update the messages state with new message object
+      const updatedMessages = [...messages, newMessage];
+      setMessages(updatedMessages);
+      setInputValue("");
 
-    // update the chat object on right chat session with updatedMessages
-    const updatedChats = chats.map((chat) => {
-      if (chat.id === activeChat) {
-        return { ...chat, messages: updatedMessages };
-      }
-      return chat;
-    });
+      // update the chat object on right chat session with updatedMessages
+      const updatedChats = chats.map((chat) => {
+        if (chat.id === activeChat) {
+          return { ...chat, messages: updatedMessages };
+        }
+        return chat;
+      });
 
-    setChats(updatedChats);
+      setChats(updatedChats);
+    }
   };
 
   // sending message on click on enter after writing the message in input field
@@ -67,14 +73,14 @@ export default function ChatBotApp({
 
   // deleting a chat function
   const handleDeleteChat = (id) => {
-    const updatedChats = chats.filter((chat) => {
-      chat.id !== id;
-    });
+    const updatedChats = chats.filter((chat) => chat.id !== id);
     setChats(updatedChats);
 
     // setting of new activeChat after deleting of the active one
-    const newActiveChat = updatedChats.length > 0 ? updatedChats[0].id : [];
-    setActiveChat(newActiveChat);
+    if (id === activeChat) {
+      const newActiveChat = updatedChats.length > 0 ? updatedChats[0].id : null;
+      setActiveChat(newActiveChat);
+    }
   };
 
   return (
@@ -95,7 +101,10 @@ export default function ChatBotApp({
             <h4>{chat.displayID}</h4>
             <i
               className="bx bxs-folder-minus"
-              onClick={() => handleDeleteChat(chat.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteChat(chat.id);
+              }}
             ></i>
           </div>
         ))}

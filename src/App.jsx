@@ -25,13 +25,22 @@ export default function App() {
   };
 
   // create function for adding new chat with empty messages property and add it to current chats array
-  const createNewChat = () => {
+  const createNewChat = (initialMessage = "") => {
     const newChat = {
       id: uuidv4(),
       displayID: `Chat log: ${new Date().toLocaleDateString(
         "en-GB"
       )} ${new Date().toLocaleTimeString()}`,
-      messages: [],
+      // if all chats are deleted, we need initialMessage to be set in order to be added
+      messages: initialMessage
+        ? [
+            {
+              type: "prompt",
+              text: initialMessage,
+              timestamp: new Date().toLocaleTimeString(),
+            },
+          ]
+        : [],
     };
     // create updatedChats component which will be existing chats array spread with the newChat array
     const updatedChats = [newChat, ...chats];
