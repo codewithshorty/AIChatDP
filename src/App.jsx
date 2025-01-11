@@ -1,6 +1,6 @@
 import ChatBotStart from "./components/ChatBotStart";
 import ChatBotApp from "./components/ChatBotApp";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export default function App() {
@@ -11,6 +11,17 @@ export default function App() {
 
   // Creating of activeChat state for tracking of active chat and showing messages which are related to that chat
   const [activeChat, setActiveChat] = useState(null);
+
+  // Loading of chats from storrage and setting the first chat in array to be active
+  useEffect(() => {
+    const storedChatsLocalStorage = JSON.parse(
+      localStorage.getItem(chats) || []
+    );
+    setChats(storedChatsLocalStorage);
+    if (storedChatsLocalStorage.length > 0) {
+      setActiveChat(storedChatsLocalStorage[0].id);
+    }
+  }, []);
 
   const handleChatStart = () => {
     setIsChatting(true);
