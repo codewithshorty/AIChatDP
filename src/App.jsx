@@ -14,9 +14,9 @@ export default function App() {
 
   // Loading of chats from storrage and setting the first chat in array to be active
   useEffect(() => {
-    const storedChatsLocalStorage = JSON.parse(
-      localStorage.getItem(chats) || []
-    );
+    const storedChatsLocalStorage =
+      JSON.parse(localStorage.getItem("chats")) || [];
+
     setChats(storedChatsLocalStorage);
     if (storedChatsLocalStorage.length > 0) {
       setActiveChat(storedChatsLocalStorage[0].id);
@@ -57,9 +57,9 @@ export default function App() {
     const updatedChats = [newChat, ...chats];
     setChats(updatedChats);
     // setting the chats into local storage
-    localStorage.setItem(JSON.stringify("chats", updatedChats));
+    localStorage.setItem("chats", JSON.stringify(updatedChats));
     // setting the chat.id=>chat.messages
-    localStorage.setItem(JSON.stringify(newChat.id, newChat.messages));
+    localStorage.setItem(newChat.id, JSON.stringify(newChat.messages));
     // setting active chat with one currently created
     setActiveChat(newChat.id);
   };

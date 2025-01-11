@@ -68,7 +68,7 @@ export default function ChatBotApp({
       const updatedMessages = [...messages, newMessage];
       setMessages(updatedMessages);
       // setting the local storage activeChat to updatedMessages
-      localStorage.setItem(JSON.stringify(activeChat, updatedMessages));
+      localStorage.setItem(activeChat, JSON.stringify(updatedMessages));
       setInputValue("");
 
       // update the chat object on right chat session with updatedMessages
@@ -80,7 +80,7 @@ export default function ChatBotApp({
       });
 
       setChats(updatedChats);
-      localStorage.setItem(JSON.stringify("chats", updatedChats));
+      localStorage.setItem("chats", JSON.stringify(updatedChats));
 
       // ChatAI start answering
       setIsTyping(true);
@@ -119,20 +119,20 @@ export default function ChatBotApp({
       setMessages(msgOpenAiResponses);
 
       //Setting of local storage to make activeChat to be msgOpenAiResponses
-      localStorage.setItem(JSON.stringify(activeChat, msgOpenAiResponses));
+      localStorage.setItem(activeChat, JSON.stringify(msgOpenAiResponses));
 
       // updating the chat object with responded messages from the API
       const chatOpenAiResponses = chats.map((chat) => {
         if (chat.id === activeChat) {
           return { ...chat, messages: msgOpenAiResponses };
         }
-        return msgOpenAiResponses;
+        return chat;
       });
 
       setChats(chatOpenAiResponses);
 
       // Setting the local storage item of chats to ne chatOpenAiResponses
-      localStorage.setItem(JSON.stringify("chats", chatOpenAiResponses));
+      localStorage.setItem("chats", JSON.stringify(chatOpenAiResponses));
       setIsTyping(false);
     }
   };
@@ -156,7 +156,7 @@ export default function ChatBotApp({
     setChats(updatedChats);
 
     // setting of local storage after the updating of the chats and removing the item with id
-    localStorage.setItem(JSON.stringify("chats", updatedChats));
+    localStorage.setItem("chats", JSON.stringify(updatedChats));
     localStorage.removeItem(id);
     // setting of new activeChat after deleting of the active one
     if (id === activeChat) {
