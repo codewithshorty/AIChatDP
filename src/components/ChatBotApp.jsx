@@ -1,5 +1,8 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+
+import { useEffect, useRef, useState } from "react";
+import Picker from "@emoji-mart/react";
+import data from "@emoji-mart/data";
 
 import "./ChatBotApp.css";
 
@@ -11,10 +14,21 @@ export default function ChatBotApp({
   setActiveChat,
   onNewChat,
 }) {
+  const apiKey = import.meta.env.VITE_API_KEY;
+
   // inputValue state for storing the value
   const [inputValue, setInputValue] = useState("");
   // creating of messages state where we will store messages within the chats object
   const [messages, setMessages] = useState(chats[0]?.messages || []);
+
+  // creating the state for indicating the chatAI typing simulation
+  const [isTyping, setIsTyping] = useState(false);
+
+  // creating the state for toggle window of emojiPicker
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  // ref position for end of the chat list
+  const endOfChatRef = useRef(null);
 
   // create the effect which will follow which chat is clicked and showing the refflected messages with created activeChatObject
   useEffect(() => {
@@ -28,7 +42,7 @@ export default function ChatBotApp({
   };
 
   // creating the function for updating the chat.messages field with the input value
-  const sendMessage = () => {
+  const sendMessage = async () => {
     //creating the newMEssage object from input value
     if (inputValue.trim === "") return;
     const newMessage = {
@@ -40,6 +54,7 @@ export default function ChatBotApp({
     // scenario where there is no activeChat in case all chats are deleted
     if (!activeChat) {
       onNewChat(inputValue);
+      setInputValue("");
     } else {
       // update the messages state with new message object
       const updatedMessages = [...messages, newMessage];
@@ -55,6 +70,53 @@ export default function ChatBotApp({
       });
 
       setChats(updatedChats);
+
+      // ChatAI start answering
+      setIsTyping(true);
+
+      // making an API call at openAI
+
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: apiKey,
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: inputValue }],
+            max_tokens: 500,
+            temperature: 0.7,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      const chatdpResponse = data.choices[0].message.content.trim();
+
+      // creating propper msgObject
+      const msgRespObject = {
+        type: "response",
+        text: chatdpResponse,
+        timestamp: new Date().toLocaleTimeString(),
+      };
+
+      // updating the message object with proper response object
+      const msgOpenAiResponse = [...updatedMessages, msgRespObject];
+      setMessages(msgOpenAiResponse);
+
+      // updating the chat object with responded messages from the API
+      const chatOpenAiResponse = chats.map((chat) => {
+        if (chat.id === activeChat) {
+          return { ...chat, messages: msgOpenAiResponse };
+        }
+        return msgOpenAiResponse;
+      });
+
+      setChats(chatOpenAiResponse);
+      setIsTyping(false);
     }
   };
 
@@ -82,6 +144,16 @@ export default function ChatBotApp({
       setActiveChat(newActiveChat);
     }
   };
+
+  // creating the function for picking inputValue alongside the picked emoji
+  const handleSelectEmoji = (emoji) => {
+    setInputValue((prevValue) => prevValue + emoji.native);
+  };
+
+  //listening to messages to all the time scroll to last one
+  useEffect(() => {
+    endOfChatRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
     <div className="chat-app">
@@ -124,10 +196,19 @@ export default function ChatBotApp({
               <span>{message.timestamp}</span>
             </div>
           ))}
-          <div className="typing">...Typing...</div>
+          <div ref={endOfChatRef}></div>
+          {isTyping && <div className="typing">...Typing...</div>}
         </div>
         <form className="msg-form" onSubmit={(e) => e.preventDefault()}>
-          <i className="bx bx-smile smile"></i>
+          <i
+            className="bx bx-smile smile"
+            onClick={() => setShowEmojiPicker((prevState) => !prevState)}
+          ></i>
+          {showEmojiPicker && (
+            <div className="picker">
+              <Picker data={data} onEmojiSelect={handleSelectEmoji} />
+            </div>
+          )}
           <input
             type="text"
             className="msg-input"
@@ -135,6 +216,7 @@ export default function ChatBotApp({
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={sendMessageEnter}
+            onFocus={() => setShowEmojiPicker(false)}
           />
           <i className="bx bxs-send" onClick={sendMessage}></i>
         </form>
