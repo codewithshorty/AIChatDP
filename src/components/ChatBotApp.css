@@ -229,3 +229,13 @@
     position: absolute;
   }
 }
+
+@media (max-width: 500px) {
+  .chat-list {
+    width: 70%;
+  }
+
+  .picker {
+    left: 2rem;
+  }
+}

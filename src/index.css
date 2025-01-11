@@ -19,3 +19,9 @@ html {
   place-items: center;
   background-color: #10002b;
 }
+
+@media (max-width: 400px) {
+  html {
+    font-size: 55%;
+  }
+}

@@ -32,3 +32,11 @@
 .start-page-btn:active {
   transform: scale(0.9);
 }
+
+@media (max-width: 500px) {
+  .start-page-btn {
+    width: 30rem;
+    height: 15rem;
+    font-size: 5rem;
+  }
+}
