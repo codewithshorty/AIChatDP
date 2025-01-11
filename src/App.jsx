@@ -45,6 +45,10 @@ export default function App() {
     // create updatedChats component which will be existing chats array spread with the newChat array
     const updatedChats = [newChat, ...chats];
     setChats(updatedChats);
+    // setting the chats into local storage
+    localStorage.setItem(JSON.stringify("chats", updatedChats));
+    // setting the chat.id=>chat.messages
+    localStorage.setItem(JSON.stringify(newChat.id, newChat.messages));
     // setting active chat with one currently created
     setActiveChat(newChat.id);
   };

@@ -104,18 +104,18 @@ export default function ChatBotApp({
       };
 
       // updating the message object with proper response object
-      const msgOpenAiResponse = [...updatedMessages, msgRespObject];
-      setMessages(msgOpenAiResponse);
+      const msgOpenAiResponses = [...updatedMessages, msgRespObject];
+      setMessages(msgOpenAiResponses);
 
       // updating the chat object with responded messages from the API
-      const chatOpenAiResponse = chats.map((chat) => {
+      const chatOpenAiResponses = chats.map((chat) => {
         if (chat.id === activeChat) {
-          return { ...chat, messages: msgOpenAiResponse };
+          return { ...chat, messages: msgOpenAiResponses };
         }
-        return msgOpenAiResponse;
+        return msgOpenAiResponses;
       });
 
-      setChats(chatOpenAiResponse);
+      setChats(chatOpenAiResponses);
       setIsTyping(false);
     }
   };
