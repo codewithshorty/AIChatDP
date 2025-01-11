@@ -36,6 +36,14 @@ export default function ChatBotApp({
     setMessages(activeChatObject ? activeChatObject.messages : []);
   }, [activeChat, chats]);
 
+  useEffect(() => {
+    if (activeChat) {
+      const storedMessagesLocalStorage =
+        JSON.parse(localStorage.getItem(activeChat)) || [];
+      setMessages(storedMessagesLocalStorage);
+    }
+  }, [activeChat]);
+
   // creating the function for updating the state with the change on input value
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -147,6 +155,9 @@ export default function ChatBotApp({
     const updatedChats = chats.filter((chat) => chat.id !== id);
     setChats(updatedChats);
 
+    // setting of local storage after the updating of the chats and removing the item with id
+    localStorage.setItem(JSON.stringify("chats", updatedChats));
+    localStorage.removeItem(id);
     // setting of new activeChat after deleting of the active one
     if (id === activeChat) {
       const newActiveChat = updatedChats.length > 0 ? updatedChats[0].id : null;
