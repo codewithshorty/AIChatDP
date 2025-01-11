@@ -59,6 +59,8 @@ export default function ChatBotApp({
       // update the messages state with new message object
       const updatedMessages = [...messages, newMessage];
       setMessages(updatedMessages);
+      // setting the local storage activeChat to updatedMessages
+      localStorage.setItem(JSON.stringify(activeChat, updatedMessages));
       setInputValue("");
 
       // update the chat object on right chat session with updatedMessages
@@ -70,6 +72,7 @@ export default function ChatBotApp({
       });
 
       setChats(updatedChats);
+      localStorage.setItem(JSON.stringify("chats", updatedChats));
 
       // ChatAI start answering
       setIsTyping(true);
@@ -107,6 +110,9 @@ export default function ChatBotApp({
       const msgOpenAiResponses = [...updatedMessages, msgRespObject];
       setMessages(msgOpenAiResponses);
 
+      //Setting of local storage to make activeChat to be msgOpenAiResponses
+      localStorage.setItem(JSON.stringify(activeChat, msgOpenAiResponses));
+
       // updating the chat object with responded messages from the API
       const chatOpenAiResponses = chats.map((chat) => {
         if (chat.id === activeChat) {
@@ -116,6 +122,9 @@ export default function ChatBotApp({
       });
 
       setChats(chatOpenAiResponses);
+
+      // Setting the local storage item of chats to ne chatOpenAiResponses
+      localStorage.setItem(JSON.stringify("chats", chatOpenAiResponses));
       setIsTyping(false);
     }
   };
